@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEO NỌC NỌC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-background {
+      background: rgb(255, 208, 229);
+      background: linear-gradient(180deg, rgba(255, 208, 229, 1) 0%, rgba(255, 232, 242, 1) 36%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    .bounce2 {
+      animation: bounce2 2s ease infinite;
+    }
+
+    @keyframes bounce2 {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+<body class="gradient-background">
+  <div class="flex items-center justify-center h-screen">
+    <div class="flex flex-col items-center p-4">
+      <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px]" style="object-fit: cover;" />
+      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4">
+        Tui nghe nói có người đang tiêu cực hả?
+      </h2>
+      <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
+        <!-- Yes button ẩn lúc đầu -->
+        <button id="yesButton"
+                class="bounce2 inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium disabled:pointer-events-none disabled:opacity-50 hover:bg-green-400 min-h-12 min-w-[75px] px-2 py-1 bg-green-500 text-white transition"
+                style="font-size: 3px; display: none;">
+          Thoi hết bùn nè!!!
+        </button>
+        <button id="noButton"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium transition disabled:pointer-events-none disabled:opacity-50 hover:bg-red-700 h-12 min-w-[75px] w-auto px-4 py-2 bg-red-500 text-white">
+          Đúng rùi á
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+
+    // Lấy các phần tử
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const valentineQuestion = document.getElementById('valentineQuestion');
+    const responseButtons = document.getElementById('responseButtons');
+
+    // Biến đếm và biến lưu kích thước
+    let noClickCount = 0;
+    let buttonHeight = 48; // Chiều cao bắt đầu
+    let buttonWidth = 250;  // Chiều rộng bắt đầu
+    let fontSize = 20;     // Cỡ chữ bắt đầu
+
+    // Mảng đường dẫn ảnh và tin nhắn
+    const imagePaths = [
+      "./images/image1.gif",
+      "./images/image2.gif",
+      "./images/image3.gif",
+      "./images/image4.gif",
+      "./images/image5.gif",
+      "./images/image6.gif",
+      "./images/image7.gif"
+    ];
+
+    const messages = [
+      "Tui nghe nói có người đang tiêu cực hả?",
+      "Tiêu cực nhiều là đi bệnh viện sẽ phải \"tiêu cực nhiều\" đó!",
+      "Mọi thứ sẽ gòi sẽ ổn thôi!",
+      "Úm ba la bà la sát đang cười",
+      "Hmmm... chưa chịu hết buồn hả ta?",
+      "Z là tui buồn theo lun :("
+    ];
+
+    // Sự kiện click No
+    noButton.addEventListener('click', function() {
+      if (noClickCount < 5) {
+        noClickCount++;
+        // Hiện nút Yes nếu đã click No quá 1 lần
+        if (noClickCount > 1) {
+          yesButton.style.display = 'inline-flex';
+        }
+        // Đổi ảnh và lời nhắn dựa trên số lần nhấn No
+        imageDisplay.src = imagePaths[noClickCount];
+        valentineQuestion.textContent = messages[noClickCount];
+
+        // Giảm mức tăng kích thước để tránh chữ to quá
+        buttonHeight += 10; 
+        buttonWidth += 10;  
+        fontSize += 2;
+        yesButton.style.height = `${buttonHeight}px`;
+        yesButton.style.width = `${buttonWidth}px`;
+        yesButton.style.fontSize = `${fontSize}px`;
+
+        // Đổi chữ trên nút No cho vui
+        noButton.textContent = [
+          "Đúng rùi á :(",
+          "Ngủ đi Hon",
+          "Ngủ đi Hon",
+          "Éo",
+          "Quỉ nhỏ này",
+          "Ngủ đi Hon"
+        ][noClickCount];
+      }
+    });
+
+    // Sự kiện click Yes
+    yesButton.addEventListener('click', () => {
+      imageDisplay.src = './images/image7.gif'; // Đổi ảnh cuối
+      valentineQuestion.textContent = "Yayyy!! :3"; // Đổi lời nhắn
+      responseButtons.style.display = 'none'; // Ẩn 2 nút
+      confetti(); // Tung confetti
+    });
+  </script>
+</body>
+</html>
